@@ -87,3 +87,47 @@ func QueryHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
 }
+
+func DeleteKeyHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed. HINT: POST", http.StatusMethodNotAllowed)
+		return
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil ||
+		requestData.Name == "" ||
+		requestData.Key == "" {
+		http.Error(w, "Invalid JSON payload", http.StatusBadRequest)
+		return
+	}
+
+	dbName := requestData.Name
+	keyStr := requestData.Key
+
+	db.DeleteKeyFromDB(dbName, keyStr)
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Deleted key: '%s' in DB: '%s'.\n", keyStr, dbName)
+}
+
+func DeleteDBHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed. HINT: POST", http.StatusMethodNotAllowed)
+		return
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil ||
+		requestData.Name == "" ||
+		requestData.Key == "" {
+		http.Error(w, "Invalid JSON payload", http.StatusBadRequest)
+		return
+	}
+
+	dbName := requestData.Name
+	keyStr := requestData.Key
+
+	db.DeleteKeyFromDB(dbName, keyStr)
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Deleted Key and value for: '%s' in DB: '%s'.\n", keyStr, dbName)
+}
