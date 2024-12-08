@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"mESmaC/kvstore/db"
+	"github.com/mESmaC/kvstore/db"
 	"net/http"
 )
 
