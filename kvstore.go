@@ -1,4 +1,4 @@
-package kvstore
+package main
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ func StartServer() {
 	}()
 }
 
-func StartAlone() {
+func main() {
 	fmt.Println("===== KVStore API =====")
 	api.StartServer()
 }
