@@ -20,6 +20,8 @@ go run .
 '/query_db' request-method: 'GET'
 '/delete_key' request-method: 'POST'
 '/delete_db' request-method: 'POST'
+'/delete_value' request-method: 'POST'
+'/insert_value' request-method: 'POST'
 ```
 
 #### Body format (RAW):
@@ -97,5 +99,22 @@ Delete DB:
 ```
 {
   "name": string
+}
+```
+
+Delete Value at Key:
+```
+{
+  "name": string
+  "key": string
+}
+```
+
+Insert Value at Key:
+```
+{
+  "name": string
+  "key": string
+  "value" interface (any)
 }
 ```

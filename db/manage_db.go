@@ -43,6 +43,36 @@ func DeleteKeyFromDB(dbName, key string) {
 	fmt.Printf("Deleted Key '%s' from database  '%s'.\n", key, dbName)
 }
 
+func DeleteValueAtKey(dbName, key string) {
+	db, exists := databases[dbName]
+	if !exists {
+		fmt.Printf("Database '%s' does not exist.\n", dbName)
+		return
+	}
+	_, keyExists := db[key]
+	if !keyExists {
+		fmt.Printf("Key '%s' does not exist in database '%s'.\n", key, dbName)
+		return
+	}
+	db[key] = nil
+	fmt.Printf("Cleared value at Key '%s' in database '%s'.\n", key, dbName)
+}
+
+func CreateValueAtEmptyKey(dbName, key string, value interface{}) {
+	db, exists := databases[dbName]
+	if !exists {
+		fmt.Printf("Database '%s' does not exist.\n", dbName)
+		return
+	}
+	_, keyExists := db[key]
+	if keyExists {
+		fmt.Printf("Key '%s' already exists in database '%s'.\n", key, dbName)
+		return
+	}
+	db[key] = value
+	fmt.Printf("Created value '%v' at Key '%s' in database '%s'.\n", value, key, dbName)
+}
+
 func DeleteDB(name string) {
 	if _, exists := databases[name]; exists {
 		delete(databases, name)
