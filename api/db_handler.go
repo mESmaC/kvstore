@@ -131,3 +131,46 @@ func DeleteDBHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "Deleted Key and value for: '%s' in DB: '%s'.\n", keyStr, dbName)
 }
+
+func DeleteValueAtKeyHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed. HINT: POST", http.StatusMethodNotAllowed)
+		return
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil || requestData.Name == "" || requestData.Key == "" {
+		http.Error(w, "Invalid JSON payload. Required fields: 'name', 'key'.", http.StatusBadRequest)
+		return
+	}
+
+	dbName := requestData.Name
+	keyStr := requestData.Key
+
+	db.DeleteValueAtKey(dbName, keyStr)
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Cleared value at Key '%s' in Database '%s'.\n", keyStr, dbName)
+}
+
+func CreateValueAtEmptyKeyHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed. HINT: POST", http.StatusMethodNotAllowed)
+		return
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&requestData)
+	if err != nil || requestData.Name == "" || requestData.Key == "" || requestData.Value == nil {
+		http.Error(w, "Invalid JSON payload. Required fields: 'name', 'key', 'value'.", http.StatusBadRequest)
+		return
+	}
+
+	dbName := requestData.Name
+	keyStr := requestData.Key
+	value := requestData.Value
+
+	db.CreateValueAtEmptyKey(dbName, keyStr, value)
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Created value '%v' at Key '%s' in Database '%s'.\n", value, keyStr, dbName)
+}
